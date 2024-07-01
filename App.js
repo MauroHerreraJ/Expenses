@@ -1,72 +1,66 @@
-import { useState } from 'react';
-import { StyleSheet, View, FlatList, Button } from 'react-native';
-import {StatusBar} from "expo-status-bar"
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { GlobalStyles } from './constanst/styles';
+import {Ionicons} from "@expo/vector-icons"
 
+import ManageExpenses from './screens/ManageExpense';
+import RecentExpenses from './screens/RecentExpenses';
+import AllExpenses from './screens/AllExpenses';
 
-import GoalItem from './Components/GoalItems';
-import GoalImput from './Components/GoalInput';
+const Stack = createNativeStackNavigator();
+const BottomTabs = createBottomTabNavigator();
 
+function ExpensesOverview(){
+  return (
+  <BottomTabs.Navigator screenOptions={{
+    headerStyle:{backgroundColor: GlobalStyles.colors.primary500},
+    headerTintColor:"white",
+    tabBarStyle:{backgroundColor: GlobalStyles.colors.primary500},
+    tabBarActiveTintColor: GlobalStyles.colors.accent500
+  }}>
+      <BottomTabs.Screen 
+      name = "RecentExpenses" 
+      component={RecentExpenses}
+      options={{
+        title:"Recent Expenses",
+        tabBarLabel: "Recent",
+        tabBarIcon: ({color,size}) => <Ionicons name='hourglass' size={size} color={color}/>
+      }}/>
+      <BottomTabs.Screen 
+      name='AllExpenses' 
+      component={AllExpenses}options={{
+        title:"All Expenses",
+        tabBarLabel: "All",
+        tabBarIcon: ({color,size}) => <Ionicons name='calendar' size={size} color={color}/>
+      }}/>
+    </BottomTabs.Navigator>
+  );
+}
 
 export default function App() {
 
-  const [modalVisible, setModalIsVisible] =useState(false);
-  const [courseGoals, setCourseGoals] = useState ([]);
-
-  function startAddGoalsHandler (){
-    setModalIsVisible (true);
-  };
-
-  function endAddGoalHandler(){
-    setModalIsVisible(false);
-  };
-   
-  function addGoalHandler(enteredGoalText) {
-    setCourseGoals((currentCourseGoals) =>[
-      ...currentCourseGoals,
-      {text: enteredGoalText, id: Math.random().toString()},
-    ]);
-    endAddGoalHandler();
-  }
-
-  function deleteGoalHandler(id){
-    setCourseGoals(currentCourseGoals =>{
-      return currentCourseGoals.filter((goal)=> goal.id !== id);
-    });
-    
-  };
-
   return (
     <>
-    <StatusBar style="light"/>
-    <View style={styles.appContainer}>
-      <Button title='Add New Goal' color= "#5e0acc" onPress={startAddGoalsHandler}/>
+    <StatusBar style='auto'/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+        name = "ExpenseOverview" 
+        component={ExpensesOverview}
+        options={{headerShown: false}}/>
+        <Stack.Screen name = "ManageExpenses" component={ManageExpenses}/>
+      </Stack.Navigator>
       
-      <GoalImput  visible={modalVisible} 
-      onAddGoal={addGoalHandler} 
-      onCancel={endAddGoalHandler}/>
-
-       <View style={styles.goalsContainer}>
-        <FlatList data={courseGoals} renderItem={itemData=>{return <GoalItem text={itemData.item.text} id={itemData.item.id} onDeleteItem={deleteGoalHandler}/>;}}
-        keyExtractor={(item,index) => {return item.id;}}
-        alwaysBounceVertical = {false}/>      
-       </View>
-
-    </View>
+    </NavigationContainer>
     </>
   );
+      
 }
 
 const styles = StyleSheet.create({
 
-  appContainer:{
-    paddingTop: 60,
-    paddingHorizontal:16,
-    flex:1,
-    
-    
-  }, 
-  goalsContainer:{
-    flex:5,
-  }
-  
+ 
 });
