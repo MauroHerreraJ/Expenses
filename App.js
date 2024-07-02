@@ -7,7 +7,7 @@ import { GlobalStyles } from './constanst/styles';
 import {Ionicons} from "@expo/vector-icons"
 
 import ManageExpenses from './screens/ManageExpense';
-import RecentExpenses from './screens/RecentExpenses';
+import RecentExpenses from './screens/Recentexpenses';
 import AllExpenses from './screens/AllExpenses';
 
 const Stack = createNativeStackNavigator();
