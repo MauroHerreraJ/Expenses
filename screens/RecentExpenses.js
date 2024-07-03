@@ -6,4 +6,4 @@ function RecentExpenses(){
     );
 }
 
-export default RecentExpenses;
+export default RecentExpenses; 
