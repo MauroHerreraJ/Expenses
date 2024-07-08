@@ -5,12 +5,12 @@ import { GlobalStyles } from "../../constanst/styles";
 import { getFormattedDate } from "../../util/date";
 
 
-function ExpenseItem({Id,description,amount,date}){
+function ExpenseItem({id,description,amount,date}){
     const navigation=useNavigation();
 
     function expensePressHandler(){
        navigation.navigate("ManageExpenses",{
-        expenseId:Id
+        expenseId:id
        });
     }
 
